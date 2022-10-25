@@ -78,10 +78,10 @@
     background-color: white;
 }
 
-.edit{
+/* .edit{
     position: absolute;
     right: 200px;
-}
+} */
 
 .delete{
     color: red;
@@ -89,7 +89,8 @@
 
 .sortby{
     background-color: #FFFFFF;
-    ;
+    width: 143px !important;
+    height: 33px !important;
 }
 
 input.rounded-circle {
@@ -106,3 +107,50 @@ input.rounded-circle {
 /* .activetasks{
     display: block;
 } */
+
+.searchdiv{
+    border: 1px solid;
+    border-color: #CECECE  ;
+    border-radius: 4px;
+    height: 44px;
+    width:578px !important;
+}
+.searchbtn{
+    border: none;
+    background-color: white;
+    
+}
+
+.bi-pencil-fill{
+    color: #7e7e7f;
+}
+
+.btn-primary{
+   background-color: #0c39c7 !important;
+}
+.bi-search{
+    color: #939393;
+    ;
+}
+
+.input.form-control:focus{
+    box-shadow:#26ad13 !important;
+}
+.orangeround{
+    width: 11px;
+    height: 11px;
+    background-color: orange;
+    border-radius: 50%;
+    
+}
+.greenround{
+    width: 11px;
+    height: 11px;
+    background-color:#26ad13;
+    border-radius: 50%;
+    
+}
+
+.btn-outline-primary{
+    color: #0c39c7 !important;
+}

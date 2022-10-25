@@ -2,24 +2,24 @@
 // {objtitle: 'buy groceries', objdescription: 'bakabakabaka', objdate: '2022-10-26', iscomplete: false},
 // {objtitle: 'complete assignment', objdescription: 'hahahaha', objdate: '2022-10-01', iscomplete: false},
 // {objtitle: 'pay bills', objdescription: 'yayayay', objdate: '2022-05-10', iscomplete: false},
-// {objtitle: 'pay rent    ', objdescription: 'dsdsd', objdate: '2022-07-18', iscomplete: false}];
+// {objtitle: 'pay rent', objdescription: 'dsdsd', objdate: '2022-07-18', iscomplete: false}];
 
 // let str = localStorage.getItem("Array")
 // let arr = JSON.parse(str)
-
-
+let searchindex 
 let arr = []
+getlocalstorage();
 let add = document.querySelector('#exampleModal > div > div > div.modal-footer > button.btn.btn-primary')
 let editbtn = document.querySelector('#exampleModal20 > div > div > div.modal-footer > button.btn.btn-primary')
-// editbtn.setAttribute("data-bs-dismiss","modal")+
+
+
 
 function setlocalstorage(){
-    localStorage.setItem("Array" ,JSON.stringify(arr))
+    localStorage.setItem("todoarray" ,JSON.stringify(arr))
 }
 
 function getlocalstorage(){
-        arr = JSON.parse(localStorage.getItem("Array"))
-        createTasks();
+        arr = JSON.parse(localStorage.getItem("todoarray")) || [];
 }
 
 // creating a new div when clicking the add task button
@@ -32,8 +32,6 @@ document.querySelector('#exampleModal > div > div > div.modal-footer > button.bt
 
         
         acceptData();
-        setlocalstorage();
-        getlocalstorage();
         createTasks(); 
         add.setAttribute("data-bs-dismiss","modal")
         
@@ -59,7 +57,9 @@ let acceptData = () => {
 
     arr.push(obj1)
     // local storage pushing
-   
+    setlocalstorage();
+    counting()
+
     console.log(arr);
 }
 
@@ -67,7 +67,7 @@ let acceptData = () => {
 let createTasks = () => {
 
     document.querySelector('#duplicater').innerHTML = ""
-    for(i=0;i<arr.length;i++ ){
+    for(i=0;i<arr.length;i++){
         if(arr[i].iscomplete == false){
         document.querySelector('#duplicater').innerHTML += ` 
            
@@ -76,17 +76,24 @@ let createTasks = () => {
                 <div>
                 <input class="form-check-input rounded-circle " onclick='acceptcheckbox(${i});createcomplete();createTasks()' type="checkbox" value="" id="flexCheckDefault${i}">
                 </div>
-                <div class="ms-3">
-                <label class="form-check-label" for="flexCheckDefault">
-                    <h1 class="addedtaskheading ">${arr[i].objtitle}<h1>
-                    <p class="date">${arr[i].objdate} <p>
-                </label>
+                <div class="ms-3 ">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        <div class="d-flex align-items-center gap-2">
+                            <h1 class="addedtaskheading ">${arr[i].objtitle}<h1>
+                            <div class ="orangeround "></div>
+                        </div>
+                        <p class="date bi bi-calender"><i class="bi bi-calendar3"></i> &nbsp ${arr[i].objdate} <p>
+                    </label>
+                    
                 </div>
             </div>
 
-
+            <div class="d-flex align-items-center gap-4">
                 <button class="edit" data-bs-toggle="modal" data-bs-target="#exampleModal2${i}" ><i class="bi bi-pencil-fill"></i></button>
                 <button class="delete me-4"><i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#exampleModaldel${i}" ></i></button>
+            </div>
+
+                
                 
             
         </div>
@@ -109,7 +116,7 @@ let createTasks = () => {
                         <form>
                             <div class="mb-3">
                                 <label for="validationTextarea2" class="form-label">Title*</label> 
-                                    <textarea class="form-control"  id="validationTextareaedit${i}"required>${arr[i].objtitle}</textarea>
+                                    <textarea class="form-control"  id="validationTextareaedit${i}" required>${arr[i].objtitle}</textarea>
                                     <div class="invalid-feedback">
                                      Please enter a message in the textarea.
 
@@ -118,11 +125,11 @@ let createTasks = () => {
                             </div>
                             <div class="mb-3">
                                 <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                                <textarea class="form-control" id="exampleFormControlTextareaedit${i}" rows="3" placeholder="Add your task description.">${arr[i].objdescription} </textarea>
+                                <textarea class="form-control" id="exampleFormControlTextareaedit${i}" rows="3" placeholder="Add your task description." required>${arr[i].objdescription} </textarea>
                             </div>
                             <label for="exampleFormControlTextarea1" class="form-label">Due date</label>
 
-                            <input type="date"  class="form-control mt-2 mb-3" value="${arr[i].objdate}" id="theDateedit${i}">                  
+                            <input type="date"  class="form-control mt-2 mb-3" value="${arr[i].objdate}" id="theDateedit${i}" required>                  
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -137,12 +144,12 @@ let createTasks = () => {
 
         <!-- delete modal -->
 
-        <div class="modal fade" id="exampleModaldel${i}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade deletemodal" id="exampleModaldel${i}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog"> 
             <div class="modal-content">
               <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
               <div class="modal-header border-0 pt-4 d-flex justify-content-center">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Task?</h1>
                 
               </div>
               <div class="modal-body d-flex justify-content-center">
@@ -156,11 +163,12 @@ let createTasks = () => {
           </div> 
         </div>
         `;
+        
     // createcomplete();
     
     }
     }
-
+    counting()
     clear();
     
 }
@@ -180,6 +188,7 @@ function deleteItem(i){
     console.log(arr)
     console.log("delete operation done")
     setlocalstorage()
+    counting()
 }
 
 // editing in array of objects
@@ -262,15 +271,19 @@ let createcomplete = () => {
                 </div>
                 <div class="ms-3">
                 <label class="form-check-label" for="flexCheckDefault">
-                    <h1 class="addedtaskheading ">${arr[i].objtitle}<h1>
-                    <p class="date">${arr[i].objdate} <p>
+                <div class="d-flex gap-2"><h1 class="addedtaskheading ">${arr[i].objtitle}</h1><div class ="greenround mt-2"></div></div>
+                    <p class="date"><i class="bi bi-calendar3"></i> &nbsp ${arr[i].objdate} </p>
                 </label>
                 </div>
             </div>
 
-                <button class="edit" data-bs-toggle="modal" data-bs-target="#exampleModal2${i}" ><i class="bi bi-pencil-fill"></i></button>
+               
+                 <div class="d-flex align-items-center gap-4">
+                  <button class="edit" data-bs-toggle="modal" data-bs-target="#exampleModal2${i}" ><i class="bi bi-pencil-fill"></i></button>
                 <button class="delete me-4"><i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#exampleModaldel${i}" ></i></button>
-                 
+                 </div>
+                
+                
                 
             
         </div>  
@@ -292,7 +305,7 @@ let createcomplete = () => {
                         <form>
                             <div class="mb-3">
                                 <label for="validationTextarea2" class="form-label">Title*</label> 
-                                    <textarea class="form-control"  id="validationTextareaedit${i}"required>${arr[i].objtitle}</textarea>
+                                    <textarea class="form-control"  id="validationTextareaedit${i}" required>${arr[i].objtitle}</textarea>
                                     <div class="invalid-feedback">
                                      Please enter a message in the textarea.
 
@@ -301,11 +314,11 @@ let createcomplete = () => {
                             </div>
                             <div class="mb-3">
                                 <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                                <textarea class="form-control" id="exampleFormControlTextareaedit${i}" rows="3" placeholder="Add your task description.">${arr[i].objdescription} </textarea>
+                                <textarea class="form-control" id="exampleFormControlTextareaedit${i}" rows="3" placeholder="Add your task description." required>${arr[i].objdescription}</textarea>
                             </div>
                             <label for="exampleFormControlTextarea1" class="form-label">Due date</label>
 
-                            <input type="date"  class="form-control mt-2 mb-3" id="theDateedit${i}">${arr[i].objdate}</input>
+                            <input type="date"  class="form-control mt-2 mb-3" id="theDateedit${i}" value="${arr[i].objdate}" required>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -320,12 +333,12 @@ let createcomplete = () => {
 
         <!-- delete modal -->
 
-        <div class="modal fade" id="exampleModaldel${i}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade deletemodal" id="exampleModaldel${i}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog"> 
             <div class="modal-content">
               <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
               <div class="modal-header border-0 pt-4 d-flex justify-content-center">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Task?</h1>
                 
               </div>
               <div class="modal-body d-flex justify-content-center">
@@ -341,24 +354,10 @@ let createcomplete = () => {
         `;
         }
     
-    }}
-
-
-
-//   if(arr.length == 0){
-//     document.querySelector('.activetasks').style.display = "none";
-// }
-// if(arr.length > 0){
-//     document.querySelector('.activetasks').style.display = "block";
-// }
-
-// function displaycheck(){
-  
-// else{
-//     document.querySelector('.activetasks').style.display = "block";
-// }
-
-// } 
+    }
+    counting()
+    
+}
 
 function displaynone(){
     document.querySelector('.completeddiv').style.display = "none";
@@ -393,9 +392,32 @@ function clearcompleted(){
 
     createTasks()
     createcomplete()
+    setlocalstorage()
+    counting()
     console.log('completed cleared')
 }
 
+//conting 
+let allCount = document.getElementById("countall");
+let activeCount = document.getElementById("activecount");
+let completedCount = document.getElementById("countcompleted");
+function counting() {
+    allCount.innerHTML = "0"
+    activeCount.innerHTML = "0"
+    completedCount.innerHTML = "0"
+    for(i=0; i<arr.length; i++) {
+        allCount.innerHTML++;
+        if(arr[i].iscomplete == false) {
+            activeCount.innerHTML++;
+        }
+        if(arr[i].iscomplete == true) {
+            completedCount.innerHTML++;
+        }
+    }
+}
+
+
+counting()
 
 // find searched item
 
@@ -409,3 +431,112 @@ function clearcompleted(){
 // let printMe = findTodo(arr , 'buy groceries')
 // console.log(printMe);
 
+    // if(searchText == ""){
+        createTasks();
+        createcomplete();
+        displayblock()
+    //}
+
+function searchByTitle() {
+    searchText = document.querySelector(".searchtodo").value;
+
+    var index = arr.findIndex(function(obj1 , index) {
+        if(obj1.objtitle.toLowerCase() == searchText.toLowerCase())
+            return true;
+    });
+    
+    searchindex = index;
+    
+    if(searchindex == -1) {
+            alert("No Items Found");
+        }
+        else {
+            if(arr[searchindex].iscomplete == false) {
+                document.querySelector('.completedtasks').style.display = "none";
+                document.querySelector('body > div > div.completeddiv').style.display="none";
+                document.querySelector("#duplicater").innerHTML=""
+                searchedActive();
+            }
+            if(arr[searchindex].iscomplete == true) {
+                document.querySelector('.activetasks').style.display = "none";
+                document.querySelector('#duplicater').style.display="none";
+                document.querySelector("body > div > div.completeddiv").innerHTML=""
+                searchedCompleted();
+            }
+    }
+
+    // document.getElementById("searchText").value = ""
+}
+
+function deleteItem(searchindex){
+    arr.splice(searchindex,1)
+    createTasks()
+    createcomplete()
+    // console.log(arr)
+    // console.log("delete operation done")
+    setlocalstorage()
+    counting()
+}
+
+function searchedActive(){
+    
+    document.querySelector('#duplicater').innerHTML = ""
+   
+        if(arr[searchindex].iscomplete == false){
+        document.querySelector('#duplicater').innerHTML += ` 
+           
+        <div  class="d-flex justify-content-between align-items-center taskcontent mt-3 ">
+            <div class="form-check d-flex ms-4">
+                <div>
+                <input class="form-check-input rounded-circle " onclick='acceptcheckbox(${i});createcomplete();createTasks()' type="checkbox" value="" id="flexCheckDefault${i}">
+                </div>
+                <div class="ms-3">
+                <label class="form-check-label" for="flexCheckDefault">
+                    <h1 class="addedtaskheading ">${arr[searchindex].objtitle}<h1>
+                    <p class="date">${arr[searchindex].objdate} <p>
+                </label>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-4">
+                <button class="edit" data-bs-toggle="modal" data-bs-target="#exampleModalsearch" ><i class="bi bi-pencil-fill"></i></button>
+                <button class="delete me-4"><i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#exampleModaldel" ></i></button>
+            </div>
+                
+                
+            
+        </div>
+        
+`;
+}
+    }
+
+function searchedCompleted(){
+
+    document.querySelector('body > div > div.completeddiv').innerHTML = ""
+   
+        if(arr[searchindex].iscomplete == true){
+            document.querySelector('body > div > div.completeddiv').innerHTML += ` 
+           
+        <div  class="d-flex justify-content-between align-items-center taskcontent mt-3 ">
+            <div class="form-check d-flex ms-4">
+                <div>
+                <input class="form-check-input rounded-circle " onclick='acceptcheckbox(${i});createcomplete();createTasks()' type="checkbox" value="" id="flexCheckDefault${i}" checked>
+                </div>
+                <div class="ms-3">
+                <label class="form-check-label" for="flexCheckDefault">
+                    <h1 class="addedtaskheading ">${arr[searchindex].objtitle}<h1>
+                    <p class="date">${arr[searchindex].objdate} <p>
+                </label>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-4">
+                <button class="edit" data-bs-toggle="modal" data-bs-target="#exampleModalsearch" ><i class="bi bi-pencil-fill"></i></button>
+                <button class="delete me-4"><i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#exampleModaldel" ></i></button>
+            </div>
+              
+                 
+                
+            
+        </div> ` 
+}}
