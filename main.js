@@ -4,8 +4,7 @@
 // {objtitle: 'pay bills', objdescription: 'yayayay', objdate: '2022-05-10', iscomplete: false},
 // {objtitle: 'pay rent', objdescription: 'dsdsd', objdate: '2022-07-18', iscomplete: false}];
 
-// let str = localStorage.getItem("Array")
-// let arr = JSON.parse(str)
+
 let searchindex 
 let arr = []
 getlocalstorage();
