@@ -1,6 +1,7 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css");
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
+
 .mytasks{
     
     font-weight: 600;
@@ -153,4 +154,9 @@ input.rounded-circle {
 
 .btn-outline-primary{
     color: #0c39c7 !important;
+}
+
+.navbar{
+    --bs-navbar-hover-color:  #09174A
+    !important;
 }
