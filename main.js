@@ -1,18 +1,40 @@
-// let arr = [{objtitle: 'buy milk', objdescription: 'jabajabajaba', objdate: '2022-10-29', iscomplete: false},
-// {objtitle: 'buy groceries', objdescription: 'bakabakabaka', objdate: '2022-10-26', iscomplete: false},
-// {objtitle: 'complete assignment', objdescription: 'hahahaha', objdate: '2022-10-01', iscomplete: false},
-// {objtitle: 'pay bills', objdescription: 'yayayay', objdate: '2022-05-10', iscomplete: false},
-// {objtitle: 'pay rent', objdescription: 'dsdsd', objdate: '2022-07-18', iscomplete: false}];
+/*
+setlocalstorage() =to set items into the local storage
+getlocalstorage() = to get items from the local storage
+acceptData() = to take inputs from the form and push that items into array of objects
+createTasks() = to create divs using the data from the array
+clear() = to clear the inputs of the form after saving
+deletetask() = to take the id from the div which is same as the index and assign it to a variable
+deleteItem()=  to delete the objects from the array using splice 
+counting()= to display the count of the tasks in the navbar
+edittask()= to display the items in the form to edit it
+editItem() = to edit the items in the array and save it
+sortbyname() = to sort using the task title in alphabetical order
+sortbydate() = to sort using Date
+acceptcheckbox() = to take input data from the checkbox which is true or false and push that data into the array
+createcomplete()= to display the completed tasks by checking if the value of input box os true or false
+displaynone()= to display only active tasks
+completeddisnone() = to display only completed tasks
+displayblock() = to display all tasks
+clearcompleted() = to clear all the completed tasks
+searchtodo() = to search the todo lists
+searchedActive() = to display the searched active tasks in the div
+searchedCompleted() = to display the searched completed tasks in the div
+dueDate() = to diplay red in date if the due date is over
 
+ */
 // declaring the variable to store the id of the modal
 let modalid;
-// declaring the variable to store the id of the modal
 let indexofedit;
 let searchindex;
 let arr = [];
 let searcharray = []
 let result
 let ind
+let allCount = document.getElementById("countall");
+let activeCount = document.getElementById("activecount");
+let completedCount = document.getElementById("countcompleted");
+
 getlocalstorage();
 
 let add = document.querySelector(
@@ -85,7 +107,7 @@ let createTasks = () => {
                             <h1 class="addedtaskheading ">${arr[i].objtitle}<h1>
                             <div class ="orangeround "></div>
                         </div>
-                        <p class="date bi bi-calender"><i class="bi bi-calendar3"></i> &nbsp ${arr[i].objdate} <p>
+                        <p class="date bi bi-calender" id="date${i}"><i class="bi bi-calendar3"></i> &nbsp ${arr[i].objdate} <p>
                     </label>
                     
                 </div>
@@ -99,9 +121,11 @@ let createTasks = () => {
         `;
 
       // createcomplete();
+      dueDate(i)
     }
   }
   counting();
+  
   clear();
 };
 
@@ -266,9 +290,6 @@ function clearcompleted() {
 }
 
 //counting
-let allCount = document.getElementById("countall");
-let activeCount = document.getElementById("activecount");
-let completedCount = document.getElementById("countcompleted");
 function counting() {
   allCount.innerHTML = "0";
   activeCount.innerHTML = "0";
@@ -288,6 +309,7 @@ counting();
 createTasks();
 createcomplete();
 displayblock();
+
 
 
 function searchtodo(){
@@ -313,15 +335,16 @@ function searchtodo(){
 }
 //searched active 
 function searchedActive(){
-   
+
    if(arr[searcharray[i]].iscomplete == false){
+    
        document.querySelector('#duplicater').innerHTML += `
 
 
         <div  class="d-flex justify-content-between align-items-center taskcontent mt-3 ">
             <div class="form-check d-flex ms-4">
                 <div>
-                <input class="form-check-input rounded-circle " onclick='acceptcheckbox(${arr[searcharray[i]]});createcomplete();createTasks()' type="checkbox" value=""  id="${searcharray[i]}">
+                <input class="form-check-input rounded-circle " onclick='acceptcheckbox(${searcharray[i]});searchtodo()' type="checkbox" value=""  id="flexCheckDefault${searcharray[i]}">
                 </div>
                 <div class="ms-3 ">
                     <label class="form-check-label" for="flexCheckDefault">
@@ -344,37 +367,53 @@ function searchedActive(){
        }
 
 
-}
+} searcharray = []
+console.log('search active')
 
-//searched completed
+
 function searchedCompleted(){
 
-   if(arr[searcharray[i]].iscomplete == true){
-       document.querySelector('body > div > div.completeddiv').innerHTML += `
-       <div  class="d-flex justify-content-between align-items-center taskcontent mt-3 ">
-       <div class="form-check d-flex ms-4">
-           <div>
-           <input class="form-check-input rounded-circle " onclick='acceptcheckbox(${arr[searcharray[i]]});createcomplete();createTasks()' type="checkbox" value=""  id="${searcharray[i]}" checked>
-           </div>
-           <div class="ms-3 ">
-               <label class="form-check-label" for="flexCheckDefault">
-                   <div class="d-flex align-items-center gap-2">
-                       <h1 class="addedtaskheading ">${arr[searcharray[i]].objtitle}<h1>
-                       <div class ="greenround "></div>
-                   </div>
-                   <p class="date bi bi-calender"><i class="bi bi-calendar3"></i> &nbsp${arr[searcharray[i]].objdate} <p>
-               </label>
-               
-           </div>
-       </div>
+  if(arr[searcharray[i]].iscomplete == true){
+      document.querySelector('body > div > div.completeddiv').innerHTML += `
+      <div  class="d-flex justify-content-between align-items-center taskcontent mt-3 ">
+      <div class="form-check d-flex ms-4">
+          <div>
+          <input class="form-check-input rounded-circle " onclick='acceptcheckbox(${searcharray[i]});searchtodo()'type="checkbox" value=""  id="flexCheckDefault${searcharray[i]}" checked>
+          </div>
+          <div class="ms-3 ">
+              <label class="form-check-label" for="flexCheckDefault">
+                  <div class="d-flex align-items-center gap-2">
+                      <h1 class="addedtaskheading ">${arr[searcharray[i]].objtitle}<h1>
+                      <div class ="greenround "></div>
+                  </div>
+                  <p class="date bi bi-calender"><i class="bi bi-calendar3"></i> &nbsp${arr[searcharray[i]].objdate} <p>
+              </label>
+              
+          </div>
+      </div>
 
-       <div class="d-flex align-items-center gap-4">
-           <button class="edit" data-bs-toggle="modal" data-bs-target="#exampleModal2" id="${i}" onclick="edittask(${searcharray[i]})"><i class="bi bi-pencil-fill" ></i></button>
-           <button class="delete me-4"  data-bs-toggle="modal" data-bs-target="#exampleModaldel" id="${i}" onclick="deletetask(${searcharray[i]})"><i class="bi bi-trash" ></i></button>
-       </div>    
-   </div>
-       `
-       }
+      <div class="d-flex align-items-center gap-4">
+          <button class="edit" data-bs-toggle="modal" data-bs-target="#exampleModal2" id=""#date0"" onclick="edittask(${searcharray[i]})"><i class="bi bi-pencil-fill" ></i></button>
+          <button class="delete me-4"  data-bs-toggle="modal" data-bs-target="#exampleModaldel" id="${i}" onclick="deletetask(${searcharray[i]})"><i class="bi bi-trash" ></i></button>
+      </div>    
+  </div>
+      `
+      }
 
 
+}
+
+
+function dueDate(index) {
+  
+  let currentDate = new Date();
+  let todoDAte = new Date(arr[index].objdate);
+  if(currentDate > todoDAte)
+  { 
+    document.querySelector(`#date${index}`).style.color = " #C03503";
+    document.querySelector(`#date${index}`).style.backgroundColor = "rgba(192, 53, 3, 0.06)";
+    console.log('date updated')
+
+  }
+  
 }
