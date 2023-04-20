@@ -29,7 +29,7 @@ let indexofedit;
 let searchindex;
 let arr = [];
 let searcharray = []
-let result
+let result 
 let ind
 let allCount = document.getElementById("countall");
 let activeCount = document.getElementById("activecount");
