@@ -83,7 +83,7 @@ let acceptData = () => {
 
   arr.push(obj1);
   // local storage pushing
-  setlocalstorage();
+  setlocalstorage() ;
   counting();
 
   console.log(arr);
